@@ -1,21 +1,35 @@
 import numpy as np
 
-class LineSearch:
-    def __init__(self, method = 'gradientDescent', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
-        """
-        Initializes the Optimizer
+def minimize(f, x0, method='gradient', obj_tol=1e-6, param_tol=1e-6, max_iter=1000):
+    """
+    Main minimization function.
+    """
+    pass
 
-        Parameters:
-        param method: The optimization method to use. Default is 'gradientDescent'.
-        param obj_tol: tolerance for objective function change
-        param param_tol: tolerance for parameter (step) change
-        param max_iter: maximum number of iterations   
-        """
 
-        self.method = method 
-        self.obj_tol = obj_tol
-        self.param_tol = param_tol
-        self.max_iter = max_iter
-        self.path = []      #stores all x_i -> the path of the optimization
-        self.f_values = []  #stores all f(x_i) 
-        self.success = False #boolean -> True iff the optimization was successful
+def _gradient_descent_step(grad):
+    """
+    Returns the gradient descent direction: -grad
+    """
+    pass
+
+
+def _newton_step(grad, hess):
+    """
+    Returns the Newton direction: -H⁻¹ * grad
+    """
+    pass
+
+
+def _should_stop(prev_f, curr_f, prev_x, curr_x, obj_tol, param_tol):
+    """
+    Checks if termination criteria are met.
+    """
+    pass
+
+
+def _print_iteration_info(i, x, f_val):
+    """
+    Logs iteration number, point, and objective value.
+    """
+    print(f"Iter {i}: x = {x}, f(x) = {f_val}")
