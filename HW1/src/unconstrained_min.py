@@ -21,7 +21,7 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
 
     x = np.array(x0, dtype=float) #x is the initial point is a vector 
     #note that the examples implementation uses this structure
-    f_val, grad, hess = f(x, needHess = (method == 'NT')) #f_val is the value of the objective function at x, grad is the gradient at x, hess is the Hessian at x
+    f_val, grad, hess = f(x, need_hessian = (method == 'NT')) #f_val is the value of the objective function at x, grad is the gradient at x, hess is the Hessian at x
     x_path = [x.copy()] #x_path is a list of all points visited during the optimization process we initialize it with the initial point
     f_path = [f_val] #f_path is a list of all objective values during the optimization process we initialize it with the initial value of the objective function
     success = False #success is a boolean indicating if the algorithm converged or max_iter was reached
@@ -35,7 +35,7 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
         alpha = _backtracking_line_search(f, x, step, grad) 
         new_x = x + alpha * step #update the point
         #compute the new objective function value
-        new_f_val, new_grad, new_hess = f(new_x, needHess = (method == 'NT')) #new_f_val is the value of the objective function at new_x, new_grad is the gradient at new_x, new_hess is the Hessian at new_x
+        new_f_val, new_grad, new_hess = f(new_x, need_hessian = (method == 'NT')) #new_f_val is the value of the objective function at new_x, new_grad is the gradient at new_x, new_hess is the Hessian at new_x
 
         #print the iteration information 
         _print_iteration_info(i, new_x, new_f_val) #print the iteration number, point, and objective value
@@ -106,11 +106,11 @@ def _backtracking_line_search(f, x, direction, grad, alpha=1.0, rho=0.5, c=0.01)
     - rho: reduction factor for step size
     - c: Wolfe condition constant
     """
-    f_val, _, _ = f(x, needHess=False) #get the value of the objective function at x
+    f_val, _, _ = f(x, need_hessian=False) #get the value of the objective function at x
     while True:
         #take a step 
         new_x = x + alpha * direction
-        new_f_val, _, _ = f(new_x, needHess=False)
+        new_f_val, _, _ = f(new_x, need_hessian=False)
         #check the Wolfe condition
         if new_f_val <= f_val + c * alpha * np.dot(grad, direction):
             break
