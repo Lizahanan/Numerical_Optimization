@@ -84,7 +84,7 @@ class TestUnconstrainedMin(unittest.TestCase):
                     paths=[gd_results[3], nt_results[3]],
                     labels=["GD", "NT"],
                     title=f"{name.replace('_', ' ').title()}: Optimization Paths",
-                    save_path=plot_path  # ✅ actually pass it
+                    save_path=plot_path 
                 )
                     
                 plot_function_values(
