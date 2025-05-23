@@ -67,7 +67,12 @@ def _newton_step(grad, hess):
     instead we call the linear solver
     hess * pk = -grad
     """
-    return np.linalg.solve(hess, -grad)
+    try:
+        return np.linalg.solve(hess, -grad)
+    except np.linalg.LinAlgError:
+        # If Hessian is singular, fall back to gradient descent
+        print("Warning: hessian is singular, falling back to gradient descent.")
+        return -grad
 
 
 def _should_stop(prev_f, curr_f, prev_x, curr_x, obj_tol, param_tol):
