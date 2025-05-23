@@ -42,8 +42,8 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
         #check if the stopping criteria are met
         if _should_stop(f_val, new_f_val, x, new_x, obj_tol, param_tol):
             success = True #set success to True if the stopping criteria are met
-            last = f"Final iteration: {i}, x = {x}, f(x) = {f_val}, successful"
-            return new_x, new_f_val, success, x_path, f_path
+            last = f"Final iteration: {i}, Final location: x = {x}, Final result: f(x) = {f_val}, Success = {success}"
+            return new_x, new_f_val, success, x_path, f_path, last
             
         x, f_val, grad, hess = new_x, new_f_val, new_grad, new_hess #update the point, objective function value, gradient and Hessian
         x_path.append(x.copy()) #append the new point to the list of points visited
@@ -51,7 +51,7 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
 
     # If we reach here, it means we did not converge within max_iter
     
-    last = f"Final iteration: {i}, x = {x}, f(x) = {f_val}, unsuccessful"
+    last = f"Final iteration: {i}, Final location: x = {x}, Final result: f(x) = {f_val}, Success = {success}"
     
     return x, f_val, success, x_path, f_path, last #return the final point, objective function value, success status, list of points visited and list of objective values  
 
