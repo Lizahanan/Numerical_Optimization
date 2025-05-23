@@ -4,14 +4,14 @@ def minimize(f, x0, method='gradient', obj_tol=1e-6, param_tol=1e-6, max_iter=10
     """
     Main minimization function.
     """
-    pass
+    
 
 
 def _gradient_descent_step(grad):
     """
     Returns the gradient descent direction: -grad
     """
-    pass
+    return -grad
 
 
 def _newton_step(grad, hess):
