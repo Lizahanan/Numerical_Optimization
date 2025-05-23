@@ -19,13 +19,13 @@ plot_settings = {
     },
     "quad_ellipse": {
         "xlim": (-2, 2),
-        "ylim": (-2, 2),
-        "levels": 10
+        "ylim": (-1, 1),
+        "levels": 20
     },
     "quad_rotated_ellipse": {
         "xlim": (-2, 2),
         "ylim": (-2, 2),
-        "levels": 30
+        "levels": 15
     },
     "rosenbrock": {
         "xlim": (-2, 2),
@@ -38,8 +38,8 @@ plot_settings = {
         "levels": np.linspace(-5000, 100, 30)
     },
     "smooth_triangle": {
-        "xlim": (-2, 2),
-        "ylim": (-2, 2),
+        "xlim": (-1, 2),
+        "ylim": (-1, 2),
         "levels": np.logspace(0, 4, 25)
     }
  }
@@ -50,9 +50,9 @@ class TestUnconstrainedMin(unittest.TestCase):
                              )
         nt_result = minimize(func, x0, method="NT", max_iter=max_iter,
                              )
-
-        print(f"[{name}] GD Final: x = {gd_result[0]}, f(x) = {gd_result[1]}, Success = {gd_result[2]}")
-        print(f"[{name}] NT Final: x = {nt_result[0]}, f(x) = {nt_result[1]}, Success = {nt_result[2]}")
+        print(f"[{name}] GD {gd_result[5]}")
+        print(f"[{name}] NT {nt_result[5]}")
+        
 
         # Save plots
         os.makedirs(out_dir, exist_ok=True)
