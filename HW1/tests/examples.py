@@ -55,12 +55,26 @@ def linear(x, need_hessian=False):
     """
     Linear function f(x) = a^T x. Contour lines are straight.
     """
-    # TODO: Choose vector a, implement f, grad, hess (None)
+    a = np.array([1.0, 123.0]) # Linear function coefficients
+    # Linear function
+    f = a.T @ x
+    # Gradient is constant and equal to a
+    grad = a
     return f, grad, None
 
 def smooth_triangle(x, need_hessian=False):
     """
     Smoothed triangle function from Boyd's book, Ex 9.20.
     """
-    # TODO: Implement f, grad, hess
+    # x is a two dimensional vector
+    x1, x2 = x[0], x[1]
+    # Triangle function
+    f = np.exp(x1 + 3*x2 - 0.1) + np.exp(x1 - 3*x2 - 0.1) + np.exp(-x1 - 0.1)
+    #gradient
+    grad = np.array([np.exp(x1 + 3*x2 - 0.1) + np.exp(x1 - 3*x2 - 0.1) - np.exp(-x1 - 0.1),
+                     3 * np.exp(x1 + 3*x2 - 0.1) - 3 * np.exp(x1 - 3*x2 - 0.1)])
+    hess = np.array([[np.exp(x1 + 3*x2 - 0.1) + np.exp(x1 - 3*x2 - 0.1) + np.exp(-x1 - 0.1),
+                      3 * np.exp(x1 + 3*x2 - 0.1) - 3 * np.exp(x1 - 3*x2 - 0.1)],
+                      [3 * np.exp(x1 + 3*x2 - 0.1) - 3 * np.exp(x1 - 3*x2 - 0.1),
+                       9 * np.exp(x1 + 3*x2 - 0.1) +9 * np.exp(x1 - 3*x2 - 0.1)]]) if need_hessian else None
     return f, grad, hess
