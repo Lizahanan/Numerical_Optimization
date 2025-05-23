@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30):
+def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30, save_path=None):
     """
     Plots 2D contour lines of the objective function and overlays optimization paths in color.
 
@@ -44,10 +44,15 @@ def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Cont
         plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        # Show the plot
+        plt.show()
+    
     
 
-def plot_function_values(f_paths, labels, title="Function Value per Iteration"):
+def plot_function_values(f_paths, labels, title="Function Value per Iteration", save_path=None):
     """
     Plots f(x) vs iteration number for each method with colored lines.
     """
@@ -63,4 +68,8 @@ def plot_function_values(f_paths, labels, title="Function Value per Iteration"):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        # Show the plot
+        plt.show()
