@@ -36,8 +36,19 @@ def compute_Quads(x, Q, need_hessian):
 def rosenbrock(x, need_hessian=False):
     """
     Rosenbrock function: banana-shaped contours. Non-convex.
+    Note that we have computed gradient and hessian for it in dry HW2
     """
-    # TODO: Implement f, grad, hess
+    # x is a two dimensional vector
+    x1, x2 = x[0], x[1]
+    # Rosenbrock function
+    f = 100 * (x2 - x1**2)**2 + (1 - x1)**2
+    # Gradient
+    grad = np.array([-400 * x1 * (x2 -x1**2) + 2 * x1 - 2, 
+                     200 * (x2 - x1**2)])
+    # Hessian
+    hess = np.array([[1200 * x1**2 - 400 *x2 + 2, -400 * x1],
+                     [-400 * x1, 200]]) if need_hessian else None
+
     return f, grad, hess
 
 def linear(x, need_hessian=False):
