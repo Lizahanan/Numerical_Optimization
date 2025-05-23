@@ -37,13 +37,16 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
         #compute the new objective function value
         new_f_val, new_grad, new_hess = f(new_x, need_hessian = (method == 'NT')) #new_f_val is the value of the objective function at new_x, new_grad is the gradient at new_x, new_hess is the Hessian at new_x
 
-        #print the iteration information 
-        _print_iteration_info(i, new_x, new_f_val) #print the iteration number, point, and objective value
 
         #check if the stopping criteria are met
         if _should_stop(f_val, new_f_val, x, new_x, obj_tol, param_tol):
+            _print_iteration_info(i, new_x, new_f_val) #print the iteration number, point, and objective value
             success = True #set success to True if the stopping criteria are met
             return new_x, new_f_val, success, x_path, f_path
+                #print the iteration information 
+        if i == max_iter:
+            _print_iteration_info(i, new_x, new_f_val) #print the iteration number, point, and objective value
+
 
         x, f_val, grad, hess = new_x, new_f_val, new_grad, new_hess #update the point, objective function value, gradient and Hessian
         x_path.append(x.copy()) #append the new point to the list of points visited
