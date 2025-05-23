@@ -3,7 +3,6 @@ import numpy as np
 import os
 
 def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30, save_path=None):
-def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30, save_path=None):
     """
     Plots 2D contour lines of the objective function and overlays optimization paths in color.
 
