@@ -1,6 +1,6 @@
 import numpy as np
 
-def minimize(f, x0, method='gradient', obj_tol=1e-6, param_tol=1e-6, max_iter=1000):
+def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     """
     Main minimization function.
     """
@@ -42,3 +42,6 @@ def _print_iteration_info(i, x, f_val):
     Logs iteration number, point, and objective value.
     """
     print(f"Iter {i}: x = {x}, f(x) = {f_val}")
+
+def _backtracking_line_search(f, x, direction, grad, alpha=1.0, rho=0.5, c=0.01):
+    pass
