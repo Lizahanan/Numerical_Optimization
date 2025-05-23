@@ -68,13 +68,16 @@ def smooth_triangle(x, need_hessian=False):
     """
     # x is a two dimensional vector
     x1, x2 = x[0], x[1]
+    exp1 = np.exp(x1 + 3*x2 - 0.1)
+    exp2 = np.exp(x1 - 3*x2 - 0.1)
+    exp3 = np.exp(-x1 - 0.1)
     # Triangle function
-    f = np.exp(x1 + 3*x2 - 0.1) + np.exp(x1 - 3*x2 - 0.1) + np.exp(-x1 - 0.1)
+    f = exp1 + exp2 + exp3
     #gradient
-    grad = np.array([np.exp(x1 + 3*x2 - 0.1) + np.exp(x1 - 3*x2 - 0.1) - np.exp(-x1 - 0.1),
-                     3 * np.exp(x1 + 3*x2 - 0.1) - 3 * np.exp(x1 - 3*x2 - 0.1)])
-    hess = np.array([[np.exp(x1 + 3*x2 - 0.1) + np.exp(x1 - 3*x2 - 0.1) + np.exp(-x1 - 0.1),
-                      3 * np.exp(x1 + 3*x2 - 0.1) - 3 * np.exp(x1 - 3*x2 - 0.1)],
-                      [3 * np.exp(x1 + 3*x2 - 0.1) - 3 * np.exp(x1 - 3*x2 - 0.1),
-                       9 * np.exp(x1 + 3*x2 - 0.1) +9 * np.exp(x1 - 3*x2 - 0.1)]]) if need_hessian else None
+    grad = np.array([exp1 + exp2 - exp3,
+                     3 * exp1 - 3 * exp2])
+    hess = np.array([[exp1 + exp2 + exp3,
+                      3 * exp1 - 3 * exp2],
+                      [3 * exp1 - 3 * exp2,
+                       9 * exp1 +9 * exp2]]) if need_hessian else None
     return f, grad, hess
