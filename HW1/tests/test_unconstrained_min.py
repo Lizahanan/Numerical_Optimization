@@ -1,15 +1,16 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import unittest
+import sys
+import os as os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import numpy as np
+
 from src.unconstrained_min import minimize
-from src.utils import plot_contours_with_paths, plot_function_values
 from tests.examples import (
     quad_circle, quad_ellipse, quad_rotated_ellipse,
     rosenbrock, linear, smooth_triangle
 )
-# the plot settings for each function
+from src.utils import plot_contours_with_paths, plot_function_values
 plot_settings = {
     "quad_circle": {
         "xlim": (-2, 2),
@@ -18,13 +19,13 @@ plot_settings = {
     },
     "quad_ellipse": {
         "xlim": (-2, 2),
-        "ylim": (-2, 2),
-        "levels": 30
+        "ylim": (-1, 1),
+        "levels": 20
     },
     "quad_rotated_ellipse": {
         "xlim": (-2, 2),
         "ylim": (-2, 2),
-        "levels": 30
+        "levels": 15
     },
     "rosenbrock": {
         "xlim": (-2, 2),
@@ -37,70 +38,61 @@ plot_settings = {
         "levels": np.linspace(-5000, 100, 30)
     },
     "smooth_triangle": {
-        "xlim": (-2, 2),
-        "ylim": (-2, 2),
+        "xlim": (-1, 2),
+        "ylim": (-1, 2),
         "levels": np.logspace(0, 4, 25)
     }
-}
-# Function to run the optimization and plot results
-test_cases = {
-    "quad_circle": quad_circle,
-    "quad_ellipse": quad_ellipse,
-    "quad_rotated_ellipse": quad_rotated_ellipse,
-    "rosenbrock": rosenbrock,
-    "linear": linear,
-    "smooth_triangle": smooth_triangle
-}
-
-#create a directory to save the plots
-output_dir = "report_plots"
-os.makedirs(output_dir, exist_ok=True)
-
+ }
 class TestUnconstrainedMin(unittest.TestCase):
 
+    def run_test_case(self, func, name, x0, max_iter, out_dir):
+        gd_result = minimize(func, x0, method="GD", max_iter=max_iter,
+                             )
+        nt_result = minimize(func, x0, method="NT", max_iter=max_iter,
+                             )
+        print(f"[{name}] GD {gd_result[5]}")
+        print(f"[{name}] NT {nt_result[5]}")
+        
+
+        # Save plots
+        os.makedirs(out_dir, exist_ok=True)
+        settings = plot_settings[name]
+        xlim = settings["xlim"]
+        ylim = settings["ylim"]
+        levels = settings["levels"]
+        plot_contours_with_paths(
+            func,
+            xlim=xlim, ylim=ylim,
+            paths=[gd_result[3], nt_result[3]],
+            labels=["GD", "NT"],
+            title=f"{name} - Contour with Paths",
+            levels=levels,
+            save_path=os.path.join(out_dir, f"{name}_contour.png")
+        )
+
+        plot_function_values(
+            [gd_result[4], nt_result[4]],
+            labels=["GD", "NT"],
+            title=f"{name} - Function Value vs Iteration",
+            save_path=os.path.join(out_dir, f"{name}_fval.png")
+        )
+
     def test_all(self):
-        for name, func in test_cases.items():
-            with self.subTest(function=name):
-                x0 = np.array([-1.0, 2.0]) if name == "rosenbrock" else np.array([1.0, 1.0])
-                settings = plot_settings[name]
+        functions = {
+            "quad_circle": quad_circle,
+            "quad_ellipse": quad_ellipse,
+            "quad_rotated_ellipse": quad_rotated_ellipse,
+            "rosenbrock": rosenbrock,
+            "linear": linear,
+            "smooth_triangle": smooth_triangle
+        }
+        for name, func in functions.items():
+            x0 = np.array([1.0, 1.0]) if name != 'rosenbrock' else np.array([-1.0, 2.0])
+            max_iter = 100 if name != 'rosenbrock' else 10000
+            out_dir = "results"
+            self.run_test_case(func, name, x0, max_iter, out_dir)
+           
 
-                # Run the optimization
-                last_gd,*gd_results = minimize(func, x0, method='GD', max_iter=10000 if name == "rosenbrock" else 1000)
-                if name != "linear":
-                    last_nt, *nt_results = minimize(func, x0, method='NT', max_iter=100)
-                #print the final line 
-                print(f"{name} GD last iteration: {last_gd}")
-                if name != "linear":
-                    print(f"{name} NT last iteration: {last_nt}")
-                plot_path = os.path.join(output_dir, f"{name}_paths.png")
-                fval_path = os.path.join(output_dir, f"{name}_fval.png")
-
-                #save the contour plot
-                plot_contours_with_paths(
-                    f=func,
-                    xlim=settings["xlim"],
-                    ylim=settings["ylim"],
-                    levels=settings["levels"],
-                    paths=[gd_results[3], nt_results[3]],
-                    labels=["GD", "NT"],
-                    title=f"{name.replace('_', ' ').title()}: Optimization Paths",
-                    save_path=plot_path 
-                )
-                    
-                plot_function_values(
-                    f_paths=[gd_results[4], nt_results[4]],
-                    labels=["GD", "NT"],
-                    title=f"{name.replace('_', ' ').title()}: f(x) vs. Iteration",
-                    save_path=fval_path
-                )
-                
-                # Save the plots
-                import matplotlib.pyplot as plt
-                plt.savefig(plot_path)
-                plt.close()
-
-                plt.savefig(fval_path)
-                plt.close()
 
 if __name__ == "__main__":
     unittest.main()

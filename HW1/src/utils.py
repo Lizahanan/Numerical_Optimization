@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30, save_path=None):
     """
@@ -23,7 +24,7 @@ def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Cont
 
     # Plot the contours
     plt.figure(figsize=(8, 6))
-    contour = plt.contour(X1, X2, Z, levels=levels, cmap='viridis')
+    contour = plt.contour(X1, X2, np.log1p(Z), levels=levels, cmap='viridis')
     plt.clabel(contour, inline=True, fontsize=8)
 
     #optionally print paths 
@@ -45,11 +46,11 @@ def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Cont
     plt.grid(True)
     plt.tight_layout()
     if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         plt.savefig(save_path)
+        plt.close()
     else:
-        # Show the plot
         plt.show()
-    
     
 
 def plot_function_values(f_paths, labels, title="Function Value per Iteration", save_path=None):
@@ -69,7 +70,8 @@ def plot_function_values(f_paths, labels, title="Function Value per Iteration", 
     plt.grid(True)
     plt.tight_layout()
     if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         plt.savefig(save_path)
+        plt.close()
     else:
-        # Show the plot
         plt.show()

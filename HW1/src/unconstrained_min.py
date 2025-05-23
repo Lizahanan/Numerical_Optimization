@@ -26,7 +26,7 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     x_path = [x.copy()] #x_path is a list of all points visited during the optimization process we initialize it with the initial point
     f_path = [f_val] #f_path is a list of all objective values during the optimization process we initialize it with the initial value of the objective function
     success = False #success is a boolean indicating if the algorithm converged or max_iter was reached
-    last = None #last is a variable to store the last iteration information
+    last = None #last is a string that will be used to print the final iteration information
 
 
     #main iteration loop 
@@ -43,18 +43,18 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
         #check if the stopping criteria are met
         if _should_stop(f_val, new_f_val, x, new_x, obj_tol, param_tol):
             success = True #set success to True if the stopping criteria are met
-            return new_x, new_f_val, success, x_path, f_path
-                #print the iteration information 
-        
-
-
+            last = f"Final iteration: {i}, Final location: x = {x}, Final result: f(x) = {f_val}, Success = {success}"
+            return new_x, new_f_val, success, x_path, f_path, last
+            
         x, f_val, grad, hess = new_x, new_f_val, new_grad, new_hess #update the point, objective function value, gradient and Hessian
         x_path.append(x.copy()) #append the new point to the list of points visited
         f_path.append(f_val) #append the new objective function value to the list of objective values
 
     # If we reach here, it means we did not converge within max_iter
-    last = f"Iter {i}: x = {new_x}, f(x) = {new_f_val}, Success = {success}"#print the iteration number, point, and success status
-    return  last, x, f_val, success, x_path, f_path,  #return the final point, objective function value, success status, list of points visited and list of objective values  
+    
+    last = f"Final iteration: {i}, Final location: x = {x}, Final result: f(x) = {f_val}, Success = {success}"
+    
+    return x, f_val, success, x_path, f_path, last #return the final point, objective function value, success status, list of points visited and list of objective values  
 
 
 def _gradient_descent_step(grad):
