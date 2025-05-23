@@ -65,9 +65,9 @@ class TestUnconstrainedMin(unittest.TestCase):
                 settings = plot_settings[name]
 
                 # Run the optimization
-                *gd_results, last_gd = minimize(func, x0, method='GD', max_iter=10000 if name == "rosenbrock" else 1000)
+                last_gd,*gd_results = minimize(func, x0, method='GD', max_iter=10000 if name == "rosenbrock" else 1000)
                 if name != "linear":
-                    *nt_results, last_nt = minimize(func, x0, method='NT', max_iter=100)
+                    last_nt, *nt_results = minimize(func, x0, method='NT', max_iter=100)
                 #print the final line 
                 print(f"{name} GD last iteration: {last_gd}")
                 if name != "linear":
