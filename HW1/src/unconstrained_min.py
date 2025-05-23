@@ -14,7 +14,6 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     Returns:
     - x : the final location -> the minimizer
     - f_val : the final value of the objective function
-    - i : the number of iterations
     - success : boolean indicating if the algorithm converged or max_iter was reached
     - x_path : list of all points visited during the optimization process
     - f_path : list of all objective values during the optimization process
@@ -26,7 +25,36 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     x_path = [x.copy()] #x_path is a list of all points visited during the optimization process we initialize it with the initial point
     f_path = [f_val] #f_path is a list of all objective values during the optimization process we initialize it with the initial value of the objective function
     success = False #success is a boolean indicating if the algorithm converged or max_iter was reached
+
+
+    #main iteration loop 
+    for i in range(1, max_iter + 1):
+        #compute the step direction
+        step = _gradient_descent_step(grad) if method == 'GD' else _newton_step(grad, hess)
+        #choose alpha 
+        alpha = _backtracking_line_search(f, x, step, grad) 
+        new_x = x + alpha * step #update the point
+        #compute the new objective function value
+        new_f_val, new_grad, new_hess = f(new_x, needHess = (method == 'NT')) #new_f_val is the value of the objective function at new_x, new_grad is the gradient at new_x, new_hess is the Hessian at new_x
+
+        #print the iteration information 
+        _print_iteration_info(i, new_x, new_f_val) #print the iteration number, point, and objective value
+
+        #check if the stopping criteria are met
+        if _should_stop(f_val, new_f_val, x, new_x, obj_tol, param_tol):
+            success = True #set success to True if the stopping criteria are met
+            return new_x, new_f_val, success, x_path, f_path
+
+        x, f_val, grad, hess = new_x, new_f_val, new_grad, new_hess #update the point, objective function value, gradient and Hessian
+        x_path.append(x.copy()) #append the new point to the list of points visited
+        f_path.append(f_val) #append the new objective function value to the list of objective values
+
+    # If we reach here, it means we did not converge within max_iter
+    return x, f_val, success, x_path, f_path #return the final point, objective function value, success status, list of points visited and list of objective values  
+
+
     
+        
 
 
 def _gradient_descent_step(grad):
