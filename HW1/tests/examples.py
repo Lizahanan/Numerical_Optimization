@@ -17,7 +17,13 @@ def quad_ellipse(x, need_hessian=False):
     """
     Quadratic function with axis-aligned ellipse Q matrix.
     """
-    # TODO: Implement Q, f, grad, hess
+    Q = np.array([[1, 0], [0, 100]]) # Ellipse matrix
+    #the function is of the form x^T Q x
+    f = x.T @ Q @ x
+    #gradient is of the form 2 Q x
+    grad = 2 * Q @ x
+    #hessian is constant and equal to 2 Q
+    hess = 2 * Q if need_hessian else None
     return f, grad, hess
 
 def quad_rotated_ellipse(x, need_hessian=False):
