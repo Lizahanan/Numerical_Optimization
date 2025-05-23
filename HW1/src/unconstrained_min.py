@@ -3,7 +3,29 @@ import numpy as np
 def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     """
     Main minimization function.
+    Parameters:
+    - f: function to minimize callable, returns (f(x), grad(x), hess(x)(optional))
+    - x0: initial point
+    - method: optimization method, 'GD' for gradient descent or 'NT' for Newton's method
+    - obj_tol: objective function tolerance set by default to 1e-12
+    - param_tol: parameter tolerance set by default to 1e-8
+    - max_iter: maximum number of iterations set by default to 100
+
+    Returns:
+    - x : the final location -> the minimizer
+    - f_val : the final value of the objective function
+    - i : the number of iterations
+    - success : boolean indicating if the algorithm converged or max_iter was reached
+    - x_path : list of all points visited during the optimization process
+    - f_path : list of all objective values during the optimization process
     """
+
+    x = np.array(x0, dtype=float) #x is the initial point is a vector 
+    #note that the examples implementation uses this structure
+    f_val, grad, hess = f(x, needHess = (method == 'NT')) #f_val is the value of the objective function at x, grad is the gradient at x, hess is the Hessian at x
+    x_path = [x.copy()] #x_path is a list of all points visited during the optimization process we initialize it with the initial point
+    f_path = [f_val] #f_path is a list of all objective values during the optimization process we initialize it with the initial value of the objective function
+    success = False #success is a boolean indicating if the algorithm converged or max_iter was reached
     
 
 
