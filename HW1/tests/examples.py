@@ -1,3 +1,4 @@
+from math import sqrt
 import numpy as np
 
 def quad_circle(x, need_hessian=False):
@@ -30,7 +31,14 @@ def quad_rotated_ellipse(x, need_hessian=False):
     """
     Quadratic function with rotated ellipse Q matrix.
     """
-    # TODO: Implement Q using R.T @ D @ R, f, grad, hess
+    R = np.array([[sqrt(3)/2, -0.5], [0.5, sqrt(3)/2]]) # Rotation matrix
+    Q = R.T @ np.array([[100, 0], [0, 1]]) @ R # Ellipse matrix
+    #the function is of the form x^T Q x
+    f = x.T @ Q @ x
+    #gradient is of the form 2 Q x
+    grad = 2 * Q @ x
+    #hessian is constant and equal to 2 Q
+    hess = 2 * Q if need_hessian else None
     return f, grad, hess
 
 def rosenbrock(x, need_hessian=False):
