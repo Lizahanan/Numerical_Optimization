@@ -72,7 +72,9 @@ class TestUnconstrainedMin(unittest.TestCase):
                 print(f"{name} GD last iteration: {last_gd}")
                 if name != "linear":
                     print(f"{name} NT last iteration: {last_nt}")
-                
+                plot_path = os.path.join(output_dir, f"{name}_paths.png")
+                fval_path = os.path.join(output_dir, f"{name}_fval.png")
+
                 #save the contour plot
                 plot_contours_with_paths(
                     f=func,
@@ -81,15 +83,17 @@ class TestUnconstrainedMin(unittest.TestCase):
                     levels=settings["levels"],
                     paths=[gd_results[3], nt_results[3]],
                     labels=["GD", "NT"],
-                    title=f"{name.replace('_', ' ').title()}: Optimization Paths"
+                    title=f"{name.replace('_', ' ').title()}: Optimization Paths",
+                    save_path=plot_path  # ✅ actually pass it
                 )
-                plot_path = os.path.join(output_dir, f"{name}_paths.png")
+                    
                 plot_function_values(
                     f_paths=[gd_results[4], nt_results[4]],
                     labels=["GD", "NT"],
-                    title=f"{name.replace('_', ' ').title()}: f(x) vs. Iteration"
+                    title=f"{name.replace('_', ' ').title()}: f(x) vs. Iteration",
+                    save_path=fval_path
                 )
-                fval_path = os.path.join(output_dir, f"{name}_fval.png")
+                
                 # Save the plots
                 import matplotlib.pyplot as plt
                 plt.savefig(plot_path)

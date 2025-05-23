@@ -54,7 +54,7 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
 
     # If we reach here, it means we did not converge within max_iter
     last = f"Iter {i}: x = {new_x}, f(x) = {new_f_val}, Success = {success}"#print the iteration number, point, and success status
-    return  x, f_val, success, x_path, f_path, last #return the final point, objective function value, success status, list of points visited and list of objective values  
+    return  last, x, f_val, success, x_path, f_path,  #return the final point, objective function value, success status, list of points visited and list of objective values  
 
 
 def _gradient_descent_step(grad):
