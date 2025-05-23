@@ -17,6 +17,7 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     - success : boolean indicating if the algorithm converged or max_iter was reached
     - x_path : list of all points visited during the optimization process
     - f_path : list of all objective values during the optimization process
+    - last : the last iteration information
     """
 
     x = np.array(x0, dtype=float) #x is the initial point is a vector 

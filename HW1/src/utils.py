@@ -3,6 +3,7 @@ import numpy as np
 import os
 
 def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30, save_path=None):
+def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Contour Plot", levels=30, save_path=None):
     """
     Plots 2D contour lines of the objective function and overlays optimization paths in color.
 
@@ -32,7 +33,7 @@ def plot_contours_with_paths(f, xlim, ylim, paths=None, labels=None, title="Cont
     markers = ['o', 's', 'D', '^', 'v', '*']
     if paths is not None:
         for i, path in enumerate(paths):
-            path = np.array(path)
+            path = np.vstack(path)
             color = colors[i % len(colors)]
             marker = markers[i % len(markers)]
             plt.plot(path[:, 0], path[:, 1], color=color, marker=marker, label=labels[i] if labels else f'Method {i+1}')
