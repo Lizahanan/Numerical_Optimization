@@ -53,10 +53,6 @@ def minimize(f, x0, method='GD', obj_tol=1e-12, param_tol=1e-8, max_iter=100):
     return x, f_val, success, x_path, f_path #return the final point, objective function value, success status, list of points visited and list of objective values  
 
 
-    
-        
-
-
 def _gradient_descent_step(grad):
     """
     Returns the gradient descent direction: -grad
@@ -94,4 +90,26 @@ def _print_iteration_info(i, x, f_val):
     print(f"Iter {i}: x = {x}, f(x) = {f_val}")
 
 def _backtracking_line_search(f, x, direction, grad, alpha=1.0, rho=0.5, c=0.01):
-    pass
+    """
+    Backtracking line search finds the step size alpha that satisfies the Wolfe conditions.
+    Parameters:
+    - f: function to minimize
+    - x: current point
+    - direction: search direction
+    - grad: gradient at current point
+    - alpha: initial step size
+    - rho: reduction factor for step size
+    - c: Wolfe condition constant
+    """
+    f_val, _, _ = f(x, needHess=False) #get the value of the objective function at x
+    while True:
+        #take a step 
+        new_x = x + alpha * direction
+        new_f_val, _, _ = f(new_x, needHess=False)
+        #check the Wolfe condition
+        if new_f_val <= f_val + c * alpha * np.dot(grad, direction):
+            break
+        alpha = rho * alpha
+    #return the step size that satisfies the Wolfe condition
+    return alpha 
+    
