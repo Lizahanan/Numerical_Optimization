@@ -13,24 +13,24 @@ from tests.examples import (
 from src.utils import plot_contours_with_paths, plot_function_values
 plot_settings = {
     "quad_circle": {
-        "xlim": (-2, 2),
+        "xlim": (-1.5, 1.5),
         "ylim": (-2, 2),
-        "levels": 30  # auto-scaled
+        "levels": 20  # auto-scaled
     },
     "quad_ellipse": {
-        "xlim": (-2, 2),
-        "ylim": (-1, 1),
-        "levels": 20
+        "xlim": (-2, 3),
+        "ylim": (-1.5, 1),
+        "levels": 10
     },
     "quad_rotated_ellipse": {
-        "xlim": (-2, 2),
+        "xlim": (-2, 3),
         "ylim": (-2, 2),
         "levels": 15
     },
     "rosenbrock": {
         "xlim": (-2, 2),
         "ylim": (-1, 3),
-        "levels": np.logspace(0, 3.5, 30)  # good for steep sides
+        "levels": 20  # good for steep sides
     },
     "linear": {
         "xlim": (-2, 2),
@@ -38,9 +38,9 @@ plot_settings = {
         "levels": np.linspace(-5000, 100, 30)
     },
     "smooth_triangle": {
-        "xlim": (-1, 2),
-        "ylim": (-1, 2),
-        "levels": np.logspace(0, 4, 25)
+        "xlim": (-3, 3),
+        "ylim": (-3, 3),
+        "levels": 30
     }
  }
 class TestUnconstrainedMin(unittest.TestCase):
