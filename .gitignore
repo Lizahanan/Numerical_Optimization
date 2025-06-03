@@ -174,3 +174,4 @@ cython_debug/
 .pypirc
 
 HW1/results/*
+HW1/.ipynb_checkpoints
