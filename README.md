@@ -17,8 +17,7 @@ This repository contains implementations of both unconstrained and constrained o
 ├── tests/
 │   ├── examples.py             # Test functions (quadratic, Rosenbrock, etc.)
 │   ├── test_unconstrained_min.py  # Unit tests for unconstrained optimization
-│   └── test_constrained_min.py    # Unit tests for constrained optimization
-├── HW1/                        # Assignment 1 implementation
+│   └── test_constrained_min.py    # Unit tests for constrained optimization                       
 └── results/                    # Generated plots and outputs
 ```
 
@@ -59,57 +58,7 @@ cd Numerical_Optimization
 - Python 3.7+
 
 ## Usage
-
-### Unconstrained Optimization
-
-```python
-from src.unconstrained_min import minimize
-from tests.examples import rosenbrock
-import numpy as np
-
-# Define starting point
-x0 = np.array([-1.0, 2.0])
-
-# Run optimization
-result = minimize(rosenbrock, x0, method='NT', max_iter=1000)
-x_final, f_final, success, x_path, f_path, info = result
-
-print(f"Final point: {x_final}")
-print(f"Final value: {f_final}")
-print(f"Converged: {success}")
-```
-
-### Constrained Optimization
-
-```python
-from src.constrained_min import interior_pt
-import numpy as np
-
-# Define objective function
-def quadratic_objective(x, need_hessian=False):
-    # min x² + y² + (z+1)²
-    f = x[0]**2 + x[1]**2 + (x[2] + 1)**2
-    grad = np.array([2*x[0], 2*x[1], 2*(x[2] + 1)])
-    hess = 2*np.eye(3) if need_hessian else None
-    return f, grad, hess
-
-# Define constraints
-ineq_constraints = [
-    lambda x, need_hessian=False: (-x[0], np.array([-1, 0, 0]), None),  # x ≥ 0
-    lambda x, need_hessian=False: (-x[1], np.array([0, -1, 0]), None),  # y ≥ 0
-    lambda x, need_hessian=False: (-x[2], np.array([0, 0, -1]), None)   # z ≥ 0
-]
-
-eq_constraints_mat = np.array([[1, 1, 1]])  # x + y + z = 1
-eq_constraints_rhs = np.array([1])
-x0 = np.array([0.1, 0.2, 0.7])
-
-# Solve constrained problem
-result = interior_pt(quadratic_objective, ineq_constraints, 
-                    eq_constraints_mat, eq_constraints_rhs, x0)
-```
-
-### Running Tests
+run the following 
 
 ```bash
 # Test unconstrained optimization
@@ -180,7 +129,8 @@ results/
 ## Course Information
 
 **Course**: Numerical Optimization  
-**Institution**: Reichman University  
+**Institution**: Reichman University
+**Professor**: Yonathan Mizrahi 
 **Semester**: Spring 2025  
 **Assignments**: Implementation-focused programming exercises
 
