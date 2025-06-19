@@ -1,7 +1,7 @@
 import numpy as np
 from src.unconstrained_min import minimize
 
-def compute_barrier(x, func, ineq_constraints, need_hessian=True):
+def compute_barrier(x, func, ineq_constraints, t , need_hessian=True ):
     '''
     Compute the barrier function value and its gradient and Hessian.
     Parameters:
@@ -32,4 +32,10 @@ def compute_barrier(x, func, ineq_constraints, need_hessian=True):
     total_grad = t * f + barier_grad
     total_hess = t * hess + barier_hess if need_hessian else None
     return total_val, total_grad, total_hess
+
+def make_barrier_function(func, ineq_constraints, t):
+    """Returns a barrier objective function suitable for `minimize`."""
+    return lambda x, need_hessian=True: compute_barrier(x, func, ineq_constraints, t, need_hessian)
+
+
 
