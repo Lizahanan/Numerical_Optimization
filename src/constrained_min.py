@@ -1,39 +1,35 @@
 import numpy as np
 from src.unconstrained_min import minimize
 
-def interior_pt(func, ineq_constraints, eq_constraints_mat, eq_constraints_rhs, x0):
-    """
-    Interior Point Method using log-barrier for constrained optimization.
-    
+def compute_barrier(x, func, ineq_constraints, need_hessian=True):
+    '''
+    Compute the barrier function value and its gradient and Hessian.
     Parameters:
-    - func: callable objective function with interface (x, need_hessian) -> (f_val, grad, hess)
-    - ineq_constraints: list of inequality constraint functions g_i(x) <= 0
-                       each with interface (x, need_hessian) -> (g_val, grad, hess)
-    - eq_constraints_mat: matrix A for equality constraints Ax = b
-    - eq_constraints_rhs: vector b for equality constraints Ax = b
-    - x0: initial point (must be strictly feasible)
-    
+    - x: current point
+    - func: objective function
+    - ineq_constraints: list of inequality constraints
+    - need_hessian: whether to compute the Hessian
     Returns:
-    - x: final point
-    - f_val: final objective value
-    - success: convergence flag
-    - outer_path: list of points from outer iterations (central path)
-    - outer_f_vals: list of objective values from outer iterations
-    - info: final iteration information
-    """
-    pass
+    - barrier_value: value of the barrier function
+    - barrier_grad: gradient of the barrier function
+    - barrier_hess: Hessian of the barrier function (if needed)
 
-def _create_barrier_function(func, ineq_constraints, eq_constraints_mat, eq_constraints_rhs, t):
-    """
-    Creates the log-barrier function for the given t parameter.
-    
-    Returns a function with interface (x, need_hessian) -> (f_val, grad, hess)
-    """
-    pass
+    '''
+    f, grad, hess = func(x, need_hessian=need_hessian)
+    barier_val = 0.0
+    barier_grad = np.zeros_like(grad)
+    barier_hess = np.zeros((len(x), len(x))) if need_hessian else None
 
-def _is_feasible(x, ineq_constraints, eq_constraints_mat, eq_constraints_rhs, tol=1e-8):
-    """
-    Check if point x is feasible for all constraints.
-    """
-    pass
+    #now for each constraint we compute the barrier function value, gradient and hessian
+    for g in ineq_constraints:
+        g_val, g_grad, g_hess = g(x, need_hessian=need_hessian)
+        barier_val-=np.log(-g_val)  # barrier function value
+        barier_grad -= g_grad / g_val
+        if need_hessian:
+            barrier_hess += (np.outer(g_grad, g_grad) / (g_val**2)) + (g_hess / -g_val)
+    #now we add the objective function value, gradient and hessian
+    total_val = t*f + barier_val
+    total_grad = t * f + barier_grad
+    total_hess = t * hess + barier_hess if need_hessian else None
+    return total_val, total_grad, total_hess
 
