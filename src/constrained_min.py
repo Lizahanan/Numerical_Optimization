@@ -148,6 +148,11 @@ def interior_point(func, ineq_constraints, eq_constraints_mat, eq_constraints_rh
     final_f_val, _, _ = func(x, need_hessian=False)
     return x, final_f_val, success, outer_path, outer_f_vals
 
+# ========================================================
+# Helper function to check feasibility of the initial point
+# ========================================================
+
+
 
         
         
