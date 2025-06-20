@@ -24,8 +24,8 @@ def compute_barrier(x, func, ineq_constraints, t , need_hessian=True ):
     for i, g in enumerate(ineq_constraints):
         g_val, g_grad, g_hess = g(x, need_hessian=need_hessian)
         # FEASIBILITY CHECK: g_i(x) must be < 0 (strictly)
-        if g_val >= 0:
-            print(f"    ERROR: Constraint {i} violated!")
+        if g_val >= -1e-14:  # Allow a small tolerance for numerical stability
+            
             # Return infinite penalty - this point is infeasible
             return np.inf, np.full_like(grad, np.inf), None
         barrier_term = -np.log(-g_val)  # Barrier term for the constraint
@@ -96,13 +96,13 @@ def interior_point(func, ineq_constraints, eq_constraints_mat, eq_constraints_rh
         #solve the barrier problem using the minimize function
         try:
             result = minimize(
-                barrier_obj,        # The barrier function (now unconstrained!)
-                x,                  # Starting point for this subproblem
-                method='NT',        # Newton's method (best for barrier functions)
-                max_iter=1000,      # Allow many inner iterations
-                obj_tol=1e-10,      # Very tight tolerance for accuracy
-                param_tol=1e-8
-            )
+                    barrier_obj,
+                    x,
+                    method='NT',
+                    max_iter=500,       # Reduced from 1000
+                    obj_tol=1e-8,       # Relaxed from 1e-10
+                    param_tol=1e-6      # Relaxed from 1e-8
+                )
             
             x_new, barrier_val, inner_success, inner_path, inner_f_vals, inner_info = result
             
