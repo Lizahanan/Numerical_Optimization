@@ -152,6 +152,55 @@ def interior_point(func, ineq_constraints, eq_constraints_mat, eq_constraints_rh
 # Helper function to check feasibility of the initial point
 # ========================================================
 
+def _check_feasibility(x, ineq_constraints, eq_constraints_mat, eq_constraints_rhs):
+    """
+    Check if point x is feasible for all constraints
+    """
+    # Check inequality constraints (must be strictly negative)
+    for i, g in enumerate(ineq_constraints):
+        g_val, _, _ = g(x, need_hessian=False)
+        if g_val >= 0:
+            print(f"Inequality constraint {i} violated: g_{i}(x) = {g_val:.6f} >= 0")
+            return False
+    
+    # Check equality constraints (must be exactly zero, within tolerance)
+    if eq_constraints_mat is not None and eq_constraints_rhs is not None:
+        eq_violations = eq_constraints_mat @ x - eq_constraints_rhs
+        max_violation = np.max(np.abs(eq_violations))
+        if max_violation > 1e-6:
+            print(f"Equality constraint violated: max violation = {max_violation:.6f}")
+            return False
+    
+    return True
+
+def _add_equality_penalty(barrier_obj, eq_constraints_mat, eq_constraints_rhs, penalty_weight=1e6):
+    """
+    Add quadratic penalty for equality constraints: Ax = b
+    Penalty: penalty_weight * ||Ax - b||²
+    """
+    def penalized_objective(x, need_hessian=True):
+        # Get barrier function values
+        barrier_val, barrier_grad, barrier_hess = barrier_obj(x, need_hessian)
+        
+        # Compute equality constraint violations
+        violations = eq_constraints_mat @ x - eq_constraints_rhs
+        
+        # Quadratic penalty: 0.5 * penalty_weight * ||violations||²
+        penalty_val = 0.5 * penalty_weight * np.dot(violations, violations)
+        penalty_grad = penalty_weight * eq_constraints_mat.T @ violations
+        
+        total_val = barrier_val + penalty_val
+        total_grad = barrier_grad + penalty_grad
+        
+        if need_hessian and barrier_hess is not None:
+            penalty_hess = penalty_weight * eq_constraints_mat.T @ eq_constraints_mat
+            total_hess = barrier_hess + penalty_hess
+        else:
+            total_hess = None
+            
+        return total_val, total_grad, total_hess
+    
+    return penalized_objective
 
 
         
