@@ -108,4 +108,40 @@ def plot_2d_feasible_region_with_path(ineq_constraints, xlim, ylim, path, title=
 
     # Plot the feasible region in green 
     ax.contourf(X1, X2, feasible.astype(int), levels=[0.5, 1.5], colors=['lightgreen'], alpha=0.3, label='Feasible Region')
+
+    # Plot constraint boundaries
+    colors_constraints = ['red', 'blue', 'orange', 'purple']
+    for i, constraint in enumerate(ineq_constraints):
+        constraint_vals = np.zeros_like(X1)
+        for j in range(X1.shape[0]):
+            for k in range(X1.shape[1]):
+                constraint_vals[j, k], _, _ = constraint(np.array([X1[j, k], X2[j, k]]), need_hessian=False)
+        
+        # Plot constraint boundary (where g(x) = 0)
+        ax.contour(X1, X2, constraint_vals, levels=[0], colors=[colors_constraints[i % len(colors_constraints)]], 
+                  linewidths=2, label=f'Constraint {i+1}')
+    # Plot optimization path
+    if path is not None and len(path) > 0:
+        path_array = np.array(path)
+        ax.plot(path_array[:, 0], path_array[:, 1], 'ro-', linewidth=2, markersize=6, 
+                label='Central Path', alpha=0.8)
+        
+        # Mark start and end points
+        ax.plot(path_array[0, 0], path_array[0, 1], 'go', markersize=10, label='Start')
+        ax.plot(path_array[-1, 0], path_array[-1, 1], 'bs', markersize=10, label='Final Solution')
     
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title(title)
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
