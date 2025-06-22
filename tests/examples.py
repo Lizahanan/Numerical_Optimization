@@ -81,3 +81,13 @@ def smooth_triangle(x, need_hessian=False):
                       [3 * exp1 - 3 * exp2,
                        9 * exp1 +9 * exp2]]) if need_hessian else None
     return f, grad, hess
+
+def qp_objective(x, need_hessian=False):
+    '''The objective function for the quadratic programming problem'''
+    #x = [x,y,z]
+    f = x[0]**2 + x[1]**2 + (x[2]+1)**2
+    grad = np.array([2*x[0], 2*x[1], 2*(x[2]+1)])
+    # Hessian is constant and equal to 2 * I
+    hess = 2 * np.eye(3) if need_hessian else None
+
+    return f, grad, hess
