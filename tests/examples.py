@@ -97,3 +97,30 @@ def qp_ineq_constraint_x(x, need_hessian=False):
     x >= 0 (-x <= 0)
     Interior point method requires g(x) < 0, so g(x) = -x
     '''
+    g_val = -x[0]  # g(x) = -x
+    g_grad = np.array([-1, 0, 0])  # Gradient is constant
+    g_hess = np.zeros((3, 3)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
+
+def qp_ineq_constraint_y(x, need_hessian=False):
+    '''Inequality constraints for the quadratic programming problem
+    y >= 0 (-y <= 0)
+    Interior point method requires g(x) < 0, so g(x) = -y
+    '''
+    g_val = -x[1]  # g(x) = -y
+    g_grad = np.array([0, -1, 0])  # Gradient is constant
+    g_hess = np.zeros((3, 3)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
+
+def qp_ineq_constraint_z(x, need_hessian=False):
+    '''Inequality constraints for the quadratic programming problem
+    z >= 0 (-z <= 0)
+    Interior point method requires g(x) < 0, so g(x) = -z 
+    '''
+    g_val = -x[2]   # g(x) = -z 
+    g_grad = np.array([0, 0, -1])  # Gradient is constant
+    g_hess = np.zeros((3, 3)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
