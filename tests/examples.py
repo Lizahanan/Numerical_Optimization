@@ -124,3 +124,15 @@ def qp_ineq_constraint_z(x, need_hessian=False):
     g_hess = np.zeros((3, 3)) if need_hessian else None  # Hessian is zero
 
     return g_val, g_grad, g_hess
+
+# QP constraint matrices for equality constraint: x + y + z = 1
+qp_eq_constraints_mat = np.array([[1.0, 1.0, 1.0]])  # A matrix: [1, 1, 1]
+qp_eq_constraints_rhs = np.array([1.0])              # b vector: [1]
+
+# QP inequality constraints list
+qp_ineq_constraints = [
+    qp_ineq_constraint_x,
+    qp_ineq_constraint_y,
+    qp_ineq_constraint_z
+]
+
