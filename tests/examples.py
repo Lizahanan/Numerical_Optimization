@@ -136,6 +136,8 @@ qp_ineq_constraints = [
     qp_ineq_constraint_z
 ]
 
+qp_x0 = np.array([0.1, 0.2, 0.7])  # Initial point for QP problem
+
 def lp_objective(x, need_hessian=False):
     '''
     Objective function for LP example: -x - y (since we're minimizing)
@@ -196,12 +198,14 @@ def lp_ineq_constraint4(x, need_hessian=False):
 
 # LP inequality constraints list
 lp_ineq_constraints = [
-    lp_ineq_constraint_1,  # y ≥ -x + 1
-    lp_ineq_constraint_2,  # y ≤ 1
-    lp_ineq_constraint_3,  # x ≤ 2
-    lp_ineq_constraint_4   # y ≥ 0
+    lp_ineq_constraint1,  # y ≥ -x + 1
+    lp_ineq_constraint2,  # y ≤ 1
+    lp_ineq_constraint3,  # x ≤ 2
+    lp_ineq_constraint4   # y ≥ 0
 ]
 
 # LP has no equality constraints
 lp_eq_constraints_mat = None
 lp_eq_constraints_rhs = None
+
+lp_x0 = np.array([0.5, 0.75])  # Initial point for LP problem

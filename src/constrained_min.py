@@ -17,8 +17,8 @@ def compute_barrier(x, func, ineq_constraints, t , need_hessian=True ):
     '''
     f, grad, hess = func(x, need_hessian=need_hessian)
     barier_val = 0.0
-    barier_grad = np.zeros_like(grad)
-    barier_hess = np.zeros((len(x), len(x))) if need_hessian else None
+    barier_grad = np.zeros_like(grad, dtype=float)
+    barier_hess = np.zeros((len(x), len(x)), dtype=float) if need_hessian else None
 
     #now for each constraint we compute the barrier function value, gradient and hessian
     for i, g in enumerate(ineq_constraints):
@@ -34,7 +34,7 @@ def compute_barrier(x, func, ineq_constraints, t , need_hessian=True ):
         barier_grad += barier_grad_term
 
         #barier hessian term
-        if need_hessian:
+        if need_hessian and g_hess is not None:
             # ∇²[-log(-g_i(x))] = (∇g_i)(∇g_i)ᵀ / g_i² - ∇²g_i / g_i
             # This comes from the product rule applied to ∇g_i / g_i
             hess_term1 = np.outer(g_grad, g_grad) / (g_val**2)  # Outer product term
@@ -43,7 +43,7 @@ def compute_barrier(x, func, ineq_constraints, t , need_hessian=True ):
     #Combine original objective with barrier terms
     total_val = t * f + barier_val
     total_grad = t * grad + barier_grad
-    total_hess = t * hess + barier_hess if need_hessian else None   
+    total_hess = t * hess + barier_hess if (need_hessian and hess is not None and barier_hess is not None) else None   
     return total_val, total_grad, total_hess        
     
 
