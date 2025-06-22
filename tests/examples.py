@@ -91,3 +91,9 @@ def qp_objective(x, need_hessian=False):
     hess = 2 * np.eye(3) if need_hessian else None
 
     return f, grad, hess
+
+def qp_ineq_constraint_x(x, need_hessian=False):
+    '''Inequality constraints for the quadratic programming problem
+    x >= 0 (-x <= 0)
+    Interior point method requires g(x) < 0, so g(x) = -x
+    '''
