@@ -136,3 +136,72 @@ qp_ineq_constraints = [
     qp_ineq_constraint_z
 ]
 
+def lp_objective(x, need_hessian=False):
+    '''
+    Objective function for LP example: -x - y (since we're minimizing)
+    Original problem: max[x + y], converted to min[-x - y]
+    '''
+    # x = [-x-y]
+    f=-x[0] - x[1]  # Objective function: -x - y
+
+    grad = np.array([-1, -1])  # Gradient is constant: [-1, -1]
+
+    hess = np.zeros((2, 2)) if need_hessian else None  # Hessian is zero
+
+    return f, grad, hess
+
+def lp_ineq_constraint1(x, need_hessian=False):
+    '''
+    y >= -x + 1
+    Interior point method requires g(x) < 0, so g(x) = -x - y + 1
+    '''
+    g_val = -x[0] - x[1] + 1  # g(x) = -x - y + 1
+    g_grad = np.array([-1, -1])  # Gradient is constant: [-1, -1]
+    g_hess = np.zeros((2, 2)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
+
+def lp_ineq_constraint2(x, need_hessian=False):
+    '''
+    y<= 1 
+    g(x) = y - 1
+    '''
+    g_val = x[1] - 1  # g(x) = y - 1
+    g_grad = np.array([0, 1])  # Gradient is constant: [0, 1]
+    g_hess = np.zeros((2, 2)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
+
+def lp_ineq_constraint3(x, need_hessian=False):
+    '''
+    x <= 2
+    g(x) = x - 2
+    '''
+    g_val = x[0] - 2  # g(x) = x -2
+    g_grad = np.array([1, 0])  # Gradient is constant: [-1, 0]
+    g_hess = np.zeros((2, 2)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
+
+def lp_ineq_constraint4(x, need_hessian=False):
+    '''
+    y >= 0
+    g(x) = -x
+    '''
+    g_val = -x[1]  # g(x) = -y
+    g_grad = np.array([0, -1])  # Gradient is constant: [-1, 0]
+    g_hess = np.zeros((2, 2)) if need_hessian else None  # Hessian is zero
+
+    return g_val, g_grad, g_hess
+
+# LP inequality constraints list
+lp_ineq_constraints = [
+    lp_ineq_constraint_1,  # y ≥ -x + 1
+    lp_ineq_constraint_2,  # y ≤ 1
+    lp_ineq_constraint_3,  # x ≤ 2
+    lp_ineq_constraint_4   # y ≥ 0
+]
+
+# LP has no equality constraints
+lp_eq_constraints_mat = None
+lp_eq_constraints_rhs = None
